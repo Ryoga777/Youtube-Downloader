@@ -20,12 +20,14 @@ def download_video():
         video_search()
         download_button.config(state=tk.DISABLED)
         yt_video.config(state=tk.DISABLED)
+        audiosave_button.config(state=tk.DISABLED)
         download_dir = filedialog.askdirectory(title="Seleziona la cartella di destinazione")
         yt = YouTube(yt_video.get())
         video = yt.streams.get_highest_resolution()
         video.download(output_path=download_dir)
         download_button.config(state=tk.ACTIVE)
         yt_video.config(state=tk.ACTIVE)
+        audiosave_button.config(state=tk.ACTIVE)
 
 def video_search():
     if yt_video.get() == "":
@@ -43,6 +45,22 @@ def video_search():
         video_info = tk.Label(window, text="Durata: "+str(yt.length)+" secondi; Visualizzazioni: "+str(yt.views), justify=LEFT, wraplength=500, font = ("Arial", 8, BOLD), bg="#ffd0bf", fg="black")
         video_info.grid(row=7, column=0, pady=10)
 
+def download_audio():
+    if yt_video.get() == "":
+        print("Inserire prima un URL valido")
+    else:
+        video_search()
+        download_button.config(state=tk.DISABLED)
+        yt_video.config(state=tk.DISABLED)
+        audiosave_button.config(state=tk.DISABLED)
+        download_dir = filedialog.askdirectory(title="Seleziona la cartella di destinazione")
+        yt = YouTube(yt_video.get())
+        audio = yt.streams.get_by_itag(140)
+        audio.download(output_path=download_dir)
+        download_button.config(state=tk.ACTIVE)
+        yt_video.config(state=tk.ACTIVE)
+        audiosave_button.config(state=tk.AACTIVE)
+  
 logo_youtube = PhotoImage(file="icona_yt.png")
 title_label = tk.Label(window, image=logo_youtube, font=("Arial",20, BOLD), bg="#ffd0bf", fg = "red")
 title_label_text = tk.Label(window, text="Downlader", font=("Arial",20, BOLD), bg="#ffd0bf", fg = "red")
@@ -57,11 +75,15 @@ yt_video = tk.Entry(window, bd=3, width=80)
 yt_video.grid(row=4, column=0, padx=5)
 
 search_icon = PhotoImage(file="lente.png")
-search_button = tk.Button(window, image=search_icon, width=20, height=20, font="Arial", bd=3, bg="red", fg="white", command = video_search)
+search_button = tk.Button(window, image=search_icon, width=20, height=20, bd=3, bg="red", command = video_search)
 search_button.grid(row=4, column = 1, pady=20)
 
 savefile = PhotoImage(file="savefile.png")
-download_button = tk.Button(window, image=savefile, width=20, height=20, font="Arial", bd=3, bg="red", fg="white", command = download_video)
+download_button = tk.Button(window, image=savefile, width=20, height=20, bd=3, bg="red", command = download_video)
 download_button.grid(row=4, column = 2, pady=20)
+
+audiosave = PhotoImage(file="audiosave.png")
+audiosave_button = tk.Button(window, image=audiosave, width=20, height=20, bd=3, bg="red", command= download_audio)
+audiosave_button.grid(row=4, column=3, pady=20)
 
 window.mainloop()
